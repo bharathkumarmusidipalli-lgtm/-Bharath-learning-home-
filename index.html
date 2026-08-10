@@ -1,34 +1,106 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Bharath Learning Home</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding-top: 80px;
+            background: white;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 80%;
+            max-width: 500px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            font-size: 16px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .subjects {
+            margin-top: 40px;
+        }
+
+        .card {
+            display: inline-block;
+            padding: 15px;
+            margin: 8px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
     <h1>🎓 Bharath Learning Home</h1>
 
-    <p>Learn • Practice • Grow</p>
+    <p class="subtitle">Learn • Practice • Grow</p>
 
-    <h2>Welcome!</h2>
+    <input
+        class="search-box"
+        type="text"
+        id="search"
+        placeholder="🔍 Search anything..."
+    >
 
-    <p>
-        Welcome to Bharath Learning Home.
-        This website is created to help students learn
-        and improve their skills.
-    </p>
+    <div class="buttons">
+        <button onclick="search()">Search</button>
+        <button onclick="showMessage()">I'm Feeling Lucky</button>
+    </div>
 
-    <h2>📚 What can you learn?</h2>
+    <div class="subjects">
+        <h2>📚 Explore Learning</h2>
 
-    <ul>
-        <li>Mathematics</li>
-        <li>Physics</li>
-        <li>C Programming</li>
-        <li>Python</li>
-        <li>Web Development</li>
-    </ul>
+        <div class="card">🧮 Mathematics</div>
+        <div class="card">⚡ Physics</div>
+        <div class="card">💻 Programming</div>
+        <div class="card">📝 Study Materials</div>
+        <div class="card">💡 Projects</div>
+    </div>
 
-    <button>Start Learning</button>
+    <script>
+        function search() {
+            let query = document.getElementById("search").value;
+
+            if (query === "") {
+                alert("Please enter something to search!");
+            } else {
+                alert("You searched for: " + query);
+            }
+        }
+
+        function showMessage() {
+            alert("Welcome to Bharath Learning Home! 🎓");
+        }
+    </script>
 
 </body>
 </html>
