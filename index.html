@@ -1,105 +1,1367 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bharath Learning Home</title>
+
+    <title>SOSO - Smart Silent Mode</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
-            padding-top: 80px;
-            background: white;
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
         }
 
-        h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
+        .app {
+            width: 90%;
+            max-width: 500px;
+            margin: 25px auto;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .subtitle {
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        .search-box {
-            width: 80%;
-            max-width: 500px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 30px;
-            font-size: 16px;
-        }
-
-        .buttons {
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 12px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .subjects {
-            margin-top: 40px;
+            color: gray;
+            margin-bottom: 25px;
         }
 
         .card {
-            display: inline-block;
-            padding: 15px;
-            margin: 8px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 18px;
         }
+
+        input,
+        select {
+            width: 90%;
+            padding: 12px;
+            margin: 7px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin: 7px 0;
+            border: none;
+            border-radius: 12px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .item {
+            background: #f1f1f1;
+            padding: 15px;
+            margin-top: 12px;
+            border-radius: 12px;
+        }
+
+        .small-button {
+            width: 45%;
+            margin: 5px 2%;
+            padding: 10px;
+        }
+
+        #status {
+            font-size: 17px;
+            line-height: 1.7;
+            font-weight: bold;
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <h1>🎓 Bharath Learning Home</h1>
+<div class="app">
 
-    <p class="subtitle">Learn • Practice • Grow</p>
+    <!-- LOGO -->
 
-    <input
-        class="search-box"
-        type="text"
-        id="search"
-        placeholder="🔍 Search anything..."
-    >
+    <h1 class="logo">SOSO</h1>
 
-    <div class="buttons">
-        <button onclick="search()">Search</button>
-        <button onclick="showMessage()">I'm Feeling Lucky</button>
+    <p class="subtitle">
+        Smart Silent Mode
+    </p>
+
+
+    <!-- CURRENT STATUS -->
+
+    <div class="card">
+
+        <h2>Current Status</h2>
+
+        <p id="status">
+            ⏹️ SOSO Stopped
+            <br>
+            🔔 Normal Mode
+        </p>
+
+        <button onclick="startSOSO()">
+            🟢 Start SOSO
+        </button>
+
+        <button onclick="stopSOSO()">
+            🔴 Stop SOSO
+        </button>
+
     </div>
 
-    <div class="subjects">
-        <h2>📚 Explore Learning</h2>
 
-        <div class="card">🧮 Mathematics</div>
-        <div class="card">⚡ Physics</div>
-        <div class="card">💻 Programming</div>
-        <div class="card">📝 Study Materials</div>
-        <div class="card">💡 Projects</div>
+    <!-- TIMETABLE -->
+
+    <div class="card">
+
+        <h2>📅 Timetable</h2>
+
+        <select id="day">
+
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+
+        </select>
+
+
+        <input
+            type="time"
+            id="startTime"
+        >
+
+
+        <input
+            type="time"
+            id="endTime"
+        >
+
+
+        <input
+            type="text"
+            id="activity"
+            placeholder="Class / Meeting"
+        >
+
+
+        <button onclick="addTimetable()">
+            ➕ Add Timetable
+        </button>
+
+
+        <div id="timetableList"></div>
+
     </div>
 
-    <script>
-        function search() {
-            let query = document.getElementById("search").value;
 
-            if (query === "") {
-                alert("Please enter something to search!");
-            } else {
-                alert("You searched for: " + query);
+    <!-- IMPORTANT CALLS -->
+
+    <div class="card">
+
+        <h2>⭐ Important Calls</h2>
+
+
+        <input
+            type="text"
+            id="callerName"
+            placeholder="Person name"
+        >
+
+
+        <input
+            type="tel"
+            id="callerNumber"
+            placeholder="Phone number"
+        >
+
+
+        <button onclick="addImportantCall()">
+            ➕ Add Important Call
+        </button>
+
+
+        <div id="callsList"></div>
+
+
+        <button onclick="simulateCall()">
+            📞 Simulate Incoming Call
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   SOSO ON / OFF
+===================================================== */
+
+let sosoOn = false;
+
+
+function startSOSO() {
+
+    sosoOn = true;
+
+    document.getElementById("status").innerHTML =
+        "🟢 SOSO ON" +
+        "<br>" +
+        "🔔 Waiting for timetable";
+
+    checkTimetable();
+
+}
+
+
+function stopSOSO() {
+
+    sosoOn = false;
+
+    document.getElementById("status").innerHTML =
+        "⏹️ SOSO Stopped" +
+        "<br>" +
+        "🔔 Normal Mode";
+
+}
+
+
+/* =====================================================
+   TIMETABLE
+===================================================== */
+
+let editingTimetable = null;
+
+
+setInterval(checkTimetable, 1000);
+
+
+function checkTimetable() {
+
+    if (!sosoOn) {
+
+        document.getElementById("status").innerHTML =
+            "⏹️ SOSO Stopped" +
+            "<br>" +
+            "🔔 Normal Mode";
+
+        return;
+    }
+
+
+    let now = new Date();
+
+
+    let currentTime =
+        String(now.getHours()).padStart(2, "0") +
+        ":" +
+        String(now.getMinutes()).padStart(2, "0");
+
+
+    let today =
+        now.toLocaleDateString(
+            "en-US",
+            {
+                weekday: "long"
             }
+        );
+
+
+    let items =
+        document.querySelectorAll(
+            "#timetableList .item"
+        );
+
+
+    let active = false;
+
+    let activeActivity = "";
+
+    let activeEnd = "";
+
+
+    for (
+        let i = 0;
+        i < items.length;
+        i++
+    ) {
+
+        let details =
+            items[i]
+                .querySelector(".details")
+                .innerText;
+
+
+        let data =
+            details
+                .replace("📅 ", "")
+                .split(" | ");
+
+
+        let day = data[0];
+
+
+        let times =
+            data[1].split(" - ");
+
+
+        let start = times[0];
+
+        let end = times[1];
+
+
+        let activity = data[2];
+
+
+        if (
+            day === today &&
+            currentTime >= start &&
+            currentTime <= end
+        ) {
+
+            active = true;
+
+            activeActivity = activity;
+
+            activeEnd = end;
+
+            break;
+
         }
 
-        function showMessage() {
-            alert("Welcome to Bharath Learning Home! 🎓");
+    }
+
+
+    if (active) {
+
+
+        let endParts =
+            activeEnd.split(":");
+
+
+        let endHours =
+            parseInt(endParts[0]);
+
+
+        let endMinutes =
+            parseInt(endParts[1]);
+
+
+        let endTime = new Date();
+
+
+        endTime.setHours(
+            endHours,
+            endMinutes,
+            0,
+            0
+        );
+
+
+        let difference =
+            endTime - now;
+
+
+        let totalSeconds =
+            Math.floor(
+                difference / 1000
+            );
+
+
+        let hours =
+            Math.floor(
+                totalSeconds / 3600
+            );
+
+
+        let minutes =
+            Math.floor(
+                (totalSeconds % 3600) / 60
+            );
+
+
+        let seconds =
+            totalSeconds % 60;
+
+
+        document.getElementById("status").innerHTML =
+
+            "🔇 SOSO Active - Silent Mode" +
+            "<br>" +
+
+            "📚 " +
+            activeActivity +
+            "<br>" +
+
+            "⏰ Ends at " +
+            activeEnd +
+            "<br>" +
+
+            "⏳ " +
+
+            hours +
+            "h " +
+
+            minutes +
+            "m " +
+
+            seconds +
+            "s remaining";
+
+
+    } else {
+
+
+        document.getElementById("status").innerHTML =
+
+            "🟢 SOSO ON" +
+            "<br>" +
+
+            "🔔 No active timetable";
+
+    }
+
+}
+
+
+/* =====================================================
+   ADD TIMETABLE
+===================================================== */
+
+function addTimetable() {
+
+
+    let day =
+        document.getElementById("day").value;
+
+
+    let start =
+        document.getElementById("startTime").value;
+
+
+    let end =
+        document.getElementById("endTime").value;
+
+
+    let activity =
+        document
+            .getElementById("activity")
+            .value
+            .trim();
+
+
+    if (
+        start === "" ||
+        end === "" ||
+        activity === ""
+    ) {
+
+        alert(
+            "Please fill all timetable details"
+        );
+
+        return;
+    }
+
+
+    if (start >= end) {
+
+        alert(
+            "End time must be after start time"
+        );
+
+        return;
+    }
+
+
+    /* EDIT TIMETABLE */
+
+    if (editingTimetable !== null) {
+
+
+        editingTimetable
+            .querySelector(".details")
+            .innerHTML =
+
+            "📅 " +
+            day +
+            " | " +
+            start +
+            " - " +
+            end +
+            " | " +
+            activity;
+
+
+        editingTimetable = null;
+
+
+        document.getElementById(
+            "activity"
+        ).value = "";
+
+
+        saveTimetable();
+
+
+        alert(
+            "Timetable updated!"
+        );
+
+
+        checkTimetable();
+
+
+        return;
+
+    }
+
+
+    /* NEW TIMETABLE */
+
+    let item =
+        document.createElement("div");
+
+
+    item.className = "item";
+
+
+    item.innerHTML =
+
+        '<div class="details">' +
+
+        "📅 " +
+        day +
+        " | " +
+        start +
+        " - " +
+        end +
+        " | " +
+        activity +
+
+        "</div>" +
+
+
+        '<button ' +
+        'onclick="editTimetable(this)" ' +
+        'class="small-button">' +
+
+        "✏️ Edit" +
+
+        "</button>" +
+
+
+        '<button ' +
+        'onclick="deleteTimetable(this)" ' +
+        'class="small-button">' +
+
+        "🗑️ Delete" +
+
+        "</button>";
+
+
+    document
+        .getElementById(
+            "timetableList"
+        )
+        .appendChild(item);
+
+
+    document.getElementById(
+        "activity"
+    ).value = "";
+
+
+    saveTimetable();
+
+
+    checkTimetable();
+
+}
+
+
+/* =====================================================
+   EDIT TIMETABLE
+===================================================== */
+
+function editTimetable(button) {
+
+
+    let item =
+        button.parentElement;
+
+
+    let text =
+        item
+            .querySelector(".details")
+            .innerText;
+
+
+    let data =
+        text
+            .replace("📅 ", "")
+            .split(" | ");
+
+
+    document.getElementById(
+        "day"
+    ).value = data[0];
+
+
+    let time =
+        data[1].split(" - ");
+
+
+    document.getElementById(
+        "startTime"
+    ).value = time[0];
+
+
+    document.getElementById(
+        "endTime"
+    ).value = time[1];
+
+
+    document.getElementById(
+        "activity"
+    ).value = data[2];
+
+
+    editingTimetable = item;
+
+
+    alert(
+        "Edit the details and press Add Timetable."
+    );
+
+}
+
+
+/* =====================================================
+   DELETE TIMETABLE
+===================================================== */
+
+function deleteTimetable(button) {
+
+
+    if (
+        confirm(
+            "Are you sure you want to delete this timetable?"
+        )
+    ) {
+
+
+        button.parentElement.remove();
+
+
+        saveTimetable();
+
+
+        checkTimetable();
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE TIMETABLE
+===================================================== */
+
+function saveTimetable() {
+
+
+    let items =
+        document.querySelectorAll(
+            "#timetableList .item"
+        );
+
+
+    let timetable = [];
+
+
+    items.forEach(
+        function(item) {
+
+
+            let text =
+                item
+                    .querySelector(".details")
+                    .innerText;
+
+
+            timetable.push(text);
+
         }
-    </script>
+    );
+
+
+    localStorage.setItem(
+        "sosoTimetable",
+        JSON.stringify(timetable)
+    );
+
+}
+
+
+/* =====================================================
+   LOAD TIMETABLE
+===================================================== */
+
+function loadTimetable() {
+
+
+    let saved =
+        localStorage.getItem(
+            "sosoTimetable"
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    let timetable =
+        JSON.parse(saved);
+
+
+    timetable.forEach(
+        function(text) {
+
+
+            let item =
+                document.createElement("div");
+
+
+            item.className = "item";
+
+
+            item.innerHTML =
+
+                '<div class="details">' +
+
+                text +
+
+                "</div>" +
+
+
+                '<button ' +
+                'onclick="editTimetable(this)" ' +
+                'class="small-button">' +
+
+                "✏️ Edit" +
+
+                "</button>" +
+
+
+                '<button ' +
+                'onclick="deleteTimetable(this)" ' +
+                'class="small-button">' +
+
+                "🗑️ Delete" +
+
+                "</button>";
+
+
+            document
+                .getElementById(
+                    "timetableList"
+                )
+                .appendChild(item);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   IMPORTANT CALLS
+===================================================== */
+
+let editingCall = null;
+
+
+function addImportantCall() {
+
+
+    let name =
+        document
+            .getElementById("callerName")
+            .value
+            .trim();
+
+
+    let number =
+        document
+            .getElementById("callerNumber")
+            .value
+            .trim();
+
+
+    if (
+        name === "" ||
+        number === ""
+    ) {
+
+        alert(
+            "Please enter name and phone number"
+        );
+
+        return;
+    }
+
+
+    /* EDIT CALL */
+
+    if (editingCall !== null) {
+
+
+        editingCall
+            .querySelector(".callDetails")
+            .innerHTML =
+
+            "⭐ " +
+            name +
+
+            "<br>📞 " +
+            number;
+
+
+        editingCall = null;
+
+
+        document.getElementById(
+            "callerName"
+        ).value = "";
+
+
+        document.getElementById(
+            "callerNumber"
+        ).value = "";
+
+
+        saveCalls();
+
+
+        alert(
+            "Important call updated!"
+        );
+
+
+        return;
+
+    }
+
+
+    /* NEW CALL */
+
+    let item =
+        document.createElement("div");
+
+
+    item.className = "item";
+
+
+    item.innerHTML =
+
+        '<div class="callDetails">' +
+
+        "⭐ " +
+        name +
+
+        "<br>" +
+
+        "📞 " +
+        number +
+
+        "</div>" +
+
+
+        '<button ' +
+        'onclick="editCall(this)" ' +
+        'class="small-button">' +
+
+        "✏️ Edit" +
+
+        "</button>" +
+
+
+        '<button ' +
+        'onclick="deleteCall(this)" ' +
+        'class="small-button">' +
+
+        "🗑️ Delete" +
+
+        "</button>";
+
+
+    document
+        .getElementById(
+            "callsList"
+        )
+        .appendChild(item);
+
+
+    document.getElementById(
+        "callerName"
+    ).value = "";
+
+
+    document.getElementById(
+        "callerNumber"
+    ).value = "";
+
+
+    saveCalls();
+
+}
+
+
+/* =====================================================
+   EDIT IMPORTANT CALL
+===================================================== */
+
+function editCall(button) {
+
+
+    let item =
+        button.parentElement;
+
+
+    let text =
+        item
+            .querySelector(".callDetails")
+            .innerText;
+
+
+    let lines =
+        text.split("\n");
+
+
+    document.getElementById(
+        "callerName"
+    ).value =
+
+        lines[0]
+            .replace("⭐ ", "");
+
+
+    document.getElementById(
+        "callerNumber"
+    ).value =
+
+        lines[1]
+            .replace("📞 ", "");
+
+
+    editingCall = item;
+
+
+    alert(
+        "Edit the details and press Add Important Call."
+    );
+
+}
+
+
+/* =====================================================
+   DELETE IMPORTANT CALL
+===================================================== */
+
+function deleteCall(button) {
+
+
+    if (
+        confirm(
+            "Are you sure you want to delete this important call?"
+        )
+    ) {
+
+
+        button.parentElement.remove();
+
+
+        saveCalls();
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE IMPORTANT CALLS
+===================================================== */
+
+function saveCalls() {
+
+
+    let items =
+        document.querySelectorAll(
+            "#callsList .item"
+        );
+
+
+    let calls = [];
+
+
+    items.forEach(
+        function(item) {
+
+
+            let text =
+                item
+                    .querySelector(".callDetails")
+                    .innerText;
+
+
+            let lines =
+                text.split("\n");
+
+
+            let name =
+                lines[0]
+                    .replace("⭐ ", "");
+
+
+            let number =
+                lines[1]
+                    .replace("📞 ", "");
+
+
+            calls.push({
+                name: name,
+                number: number
+            });
+
+        }
+    );
+
+
+    localStorage.setItem(
+        "sosoImportantCalls",
+        JSON.stringify(calls)
+    );
+
+}
+
+
+/* =====================================================
+   LOAD IMPORTANT CALLS
+===================================================== */
+
+function loadCalls() {
+
+
+    let saved =
+        localStorage.getItem(
+            "sosoImportantCalls"
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    let calls =
+        JSON.parse(saved);
+
+
+    calls.forEach(
+        function(call) {
+
+
+            let item =
+                document.createElement("div");
+
+
+            item.className = "item";
+
+
+            item.innerHTML =
+
+                '<div class="callDetails">' +
+
+                "⭐ " +
+                call.name +
+
+                "<br>" +
+
+                "📞 " +
+                call.number +
+
+                "</div>" +
+
+
+                '<button ' +
+                'onclick="editCall(this)" ' +
+                'class="small-button">' +
+
+                "✏️ Edit" +
+
+                "</button>" +
+
+
+                '<button ' +
+                'onclick="deleteCall(this)" ' +
+                'class="small-button">' +
+
+                "🗑️ Delete" +
+
+                "</button>";
+
+
+            document
+                .getElementById(
+                    "callsList"
+                )
+                .appendChild(item);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SIMULATE INCOMING CALL
+===================================================== */
+
+let lastCallNumber = "";
+
+let lastCallTime = 0;
+
+
+function simulateCall() {
+
+
+    if (!sosoOn) {
+
+
+        alert(
+            "SOSO is OFF.\n\nStart SOSO first."
+        );
+
+
+        return;
+
+    }
+
+
+    let number =
+        prompt(
+            "Enter caller phone number:"
+        );
+
+
+    if (
+        number === null ||
+        number.trim() === ""
+    ) {
+
+        return;
+
+    }
+
+
+    number =
+        number.trim();
+
+
+    let calls =
+        document.querySelectorAll(
+            "#callsList .item"
+        );
+
+
+    let important = false;
+
+    let callerName = "";
+
+
+    calls.forEach(
+        function(item) {
+
+
+            let text =
+                item
+                    .querySelector(".callDetails")
+                    .innerText;
+
+
+            let lines =
+                text.split("\n");
+
+
+            let savedName =
+                lines[0]
+                    .replace("⭐ ", "")
+                    .trim();
+
+
+            let savedNumber =
+                lines[1]
+                    .replace("📞 ", "")
+                    .trim();
+
+
+            if (
+                savedNumber === number
+            ) {
+
+
+                important = true;
+
+                callerName = savedName;
+
+            }
+
+        }
+    );
+
+
+    let currentTime =
+        Date.now();
+
+
+    let repeated =
+
+        lastCallNumber === number &&
+
+        currentTime -
+        lastCallTime <= 30000;
+
+
+    lastCallNumber = number;
+
+    lastCallTime = currentTime;
+
+
+    /* REPEATED IMPORTANT CALL */
+
+    if (
+        important &&
+        repeated
+    ) {
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+            "📞 ⭐ Important Call - Ring Allowed";
+
+
+        alert(
+
+            "Important caller detected!\n\n" +
+
+            callerName +
+
+            " called repeatedly.\n\n" +
+
+            "SOSO allows the call to ring."
+
+        );
+
+
+    }
+
+
+    /* FIRST IMPORTANT CALL */
+
+    else if (important) {
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+            "🔇 SOSO Active - First Call";
+
+
+        alert(
+
+            "Call from " +
+
+            callerName +
+
+            " detected.\n\n" +
+
+            "If the same number calls again " +
+
+            "within 30 seconds, it will be treated " +
+
+            "as an Important Call."
+
+        );
+
+
+    }
+
+
+    /* UNKNOWN CALL */
+
+    else {
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+            "🔇 SOSO Active - Silent Mode";
+
+
+        alert(
+
+            "Unknown caller - " +
+
+            "SOSO remains active."
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD SAVED DATA WHEN PAGE OPENS
+===================================================== */
+
+loadTimetable();
+
+loadCalls();
+
+checkTimetable();
+
+</script>
 
 </body>
 </html>
